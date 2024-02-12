@@ -9,4 +9,8 @@ set(
 
 project(${PROJECT_NAME})
 
+add_subdirectory(graph)
+
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+
+target_link_libraries(${PROJECT_NAME} PUBLIC graph)
