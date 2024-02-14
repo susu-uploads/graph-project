@@ -16,8 +16,9 @@ private:
     std::vector<Edge> edgesList;
     std::vector<std::vector<int>> adjustmentMatrix;
     int representationType;
+    int size;
 public:
-    void readGraph(const std::string &fileName);
+    void readGraph(const std::string &n);
 
     void addEdge(int from, int to, int weight);
 

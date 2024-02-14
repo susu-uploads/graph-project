@@ -7,7 +7,7 @@ set(
         HEADER_FILES
         include/Graph.h
         include/Edge.h
-        include/Node.h)
+        include/Node.h include/SizeInjector.h)
 
 add_library(${LIBRARY_NAME} STATIC ${SOURCE_FILES} ${HEADER_FILES})
 
