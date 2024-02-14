@@ -2,11 +2,12 @@ set(LIBRARY_NAME graph)
 set(
         SOURCE_FILES
         src/Graph.cpp
-        src/GraphIoHelper.cpp)
+        src/Edge.cpp src/Node.cpp)
 set(
         HEADER_FILES
         include/Graph.h
-        include/GraphIoHelper.h)
+        include/Edge.h
+        include/Node.h)
 
 add_library(${LIBRARY_NAME} STATIC ${SOURCE_FILES} ${HEADER_FILES})
 

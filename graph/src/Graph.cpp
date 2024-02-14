@@ -2,13 +2,38 @@
 // Created by mick on 12.02.2024.
 //
 
-#include <GraphIoHelper.h>
+#include <fstream>
 #include "../include/Graph.h"
 
 using namespace std;
 
+// ----------------------- Internal load functions -----------------------
+void load_as_list_of_edges(Graph &graph, std::ifstream &input);
+
+void load_as_adjustment_matrix(Graph &graph, ifstream &input);
+
+void load_as_adjustment_list(Graph &graph, ifstream &input);
+
+// ----------------------- Graph -----------------------
 void Graph::readGraph(const std::string &fileName) {
-    GraphIoHelper::load_from_file(*this, fileName);
+    // Open stream
+    ifstream fileStream{fileName, ios_base::in};
+
+    // Discovering what input pattern is
+    char inputType;
+    fileStream >> inputType;
+    if (inputType == 'E') {
+        representationType = 2;
+        load_as_list_of_edges(*this, fileStream);
+    } else if (inputType == 'C') {
+        representationType = 1;
+        load_as_adjustment_matrix(*this, fileStream);
+    } else if (inputType == 'L') {
+        representationType = 0;
+        load_as_adjustment_list(*this, fileStream);
+    } else {
+        throw invalid_argument("Unrecognizable format: " + to_string(inputType));
+    }
 }
 
 void Graph::addEdge(int from, int to, int weight) {
@@ -20,10 +45,7 @@ void Graph::removeEdge(int from, int to) {
 }
 
 int Graph::changeEdge(int from, int to, int newWeight) {
-    auto edge = internal_representation[from][to];
-    auto oldWeight = edge.second;
-    edge.second = newWeight;
-    return oldWeight;
+    return 0;
 }
 
 void Graph::transformToAdjList() {
@@ -39,5 +61,40 @@ void Graph::transformToListOfEdges() {
 }
 
 void Graph::writeGraph(const std::string &fileName) {
-    GraphIoHelper::dump_to_file(*this, fileName, representationType);
+    ofstream fileStream{fileName, ios_base::out};
+    fileStream << "";
+}
+
+
+void load_as_list_of_edges(Graph &graph, std::ifstream &input) {
+    int N, M, D, W;
+    input >> N >> M >> D >> W;
+    if (W == 0) {
+        int a, b, w;
+        while (M-- > 0) {
+            input >> a >> b >> w;
+            graph.addEdge(a, b, w);
+            if (D == 0) {
+                graph.addEdge(b, a, w);
+            }
+        }
+    } else {
+        int a, b;
+        while (M-- > 0) {
+            input >> a >> b;
+            graph.addEdge(a, b, 1);
+            if (D == 0) {
+                graph.addEdge(b, a, 1);
+            }
+        }
+    }
+
+}
+
+void load_as_adjustment_matrix(Graph &graph, ifstream &input) {
+    // TODO
+}
+
+void load_as_adjustment_list(Graph &graph, ifstream &input) {
+    // TODO
 }

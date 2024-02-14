@@ -8,10 +8,13 @@
 
 #include <string>
 #include <vector>
+#include "Edge.h"
 
 class Graph {
 private:
-    std::vector<std::vector<std::pair<int, int>>> internal_representation;
+    std::vector<std::vector<Edge>> adjustmentList;
+    std::vector<Edge> edgesList;
+    std::vector<std::vector<int>> adjustmentMatrix;
     int representationType;
 public:
     void readGraph(const std::string &fileName);
