@@ -4,5 +4,5 @@
 
 #include <Edge.h>
 
-Edge::Edge(int v, int w, int length) : from(v), to(w), length(length) {}
+Edge::Edge(int v, int w, int length) : from(v), to(w), weight(length) {}
 

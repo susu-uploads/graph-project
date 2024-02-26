@@ -9,14 +9,16 @@
 #include <string>
 #include <vector>
 #include "Edge.h"
+#include "GraphAsEdgesList.h"
+#include "GraphAsAdjList.h"
+#include "GraphAsAdjMatrix.h"
 
 class Graph {
 private:
-    std::vector<std::vector<Edge>> adjustmentList;
-    std::vector<Edge> edgesList;
-    std::vector<std::vector<int>> adjustmentMatrix;
-    int representationType;
-    int size;
+    int representation;
+    GraphAsAdjMatrix graphAsAdjMatrix;
+    GraphAsAdjList graphAsAdjList;
+    GraphAsEdgesList graphAsEdgesList;
 public:
     void readGraph(const std::string &n);
 

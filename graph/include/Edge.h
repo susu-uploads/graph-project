@@ -6,7 +6,7 @@
 #define GRAPH_PROJECT_EDGE_H
 
 struct Edge {
-    int from, to, length;
+    int from, to, weight;
 
     Edge(int v, int w, int length = 1);
 };

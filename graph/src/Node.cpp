@@ -12,9 +12,9 @@ void Node::connect(int v, int weight) {
 
 int Node::rebalance(int vertice, int new_weight) {
     for (auto edge : children) {
-        int weight = edge.length;
+        int weight = edge.weight;
         if (edge.to == vertice) {
-            edge.length = new_weight;
+            edge.weight = new_weight;
             return weight;
         }
     }

@@ -8,37 +8,22 @@
 
 using namespace std;
 
-// ----------------------- Internal load functions -----------------------
-void load_as_list_of_edges(Graph &graph, std::ifstream &input, const function<void(const int)> &resize);
-
-void load_as_adjustment_matrix(Graph &graph, ifstream &input, const function<void(const int)> &resize);
-
-void load_as_adjustment_list(Graph &graph, ifstream &input, const function<void(const int)> &resize);
-
-// ----------------------- Graph -----------------------
 void Graph::readGraph(const std::string &fileName) {
     // Open stream
     ifstream fileStream{fileName, ios_base::in};
 
-    // Prepare callback for size
-    auto lambda = [&](const int n) {
-        adjustmentList.resize(n, {});
-        adjustmentMatrix.resize(n, {n});
-        edgesList.resize(n);
-    };
-
     // Discovering what input pattern is
     char inputType;
     fileStream >> inputType;
-    if (inputType == 'E') {
-        representationType = 2;
-        load_as_list_of_edges(*this, fileStream, lambda);
-    } else if (inputType == 'C') {
-        representationType = 1;
-        load_as_adjustment_matrix(*this, fileStream, lambda);
+    if (inputType == 'C') {
+        representation = 0;
+        // TODO
     } else if (inputType == 'L') {
-        representationType = 0;
-        load_as_adjustment_list(*this, fileStream, lambda);
+        representation = 1;
+        // TODO
+    } else if (inputType == 'E') {
+        representation = 2;
+        graphAsEdgesList.load(fileStream);
     } else {
         throw invalid_argument("Unrecognizable format: " + to_string(inputType));
     }
@@ -53,57 +38,32 @@ void Graph::removeEdge(int from, int to) {
 }
 
 int Graph::changeEdge(int from, int to, int newWeight) {
+    // TODO
     return 0;
 }
 
-void Graph::transformToAdjList() {
-    representationType = 0;
+void Graph::transformToAdjMatrix() {
+    representation = 0;
 }
 
-void Graph::transformToAdjMatrix() {
-    representationType = 1;
+void Graph::transformToAdjList() {
+    representation = 1;
 }
 
 void Graph::transformToListOfEdges() {
-    representationType = 2;
+    representation = 2;
 }
 
 void Graph::writeGraph(const std::string &fileName) {
     ofstream fileStream{fileName, ios_base::out};
-    fileStream << "";
-}
-
-
-void load_as_list_of_edges(Graph &graph, std::ifstream &input, const function<void(const int)> &resize) {
-    int N, M, D, W;
-    input >> N >> M >> D >> W;
-    resize(N);
-    if (W == 0) {
-        int a, b, w;
-        while (M-- > 0) {
-            input >> a >> b >> w;
-            graph.addEdge(a, b, w);
-            if (D == 0) {
-                graph.addEdge(b, a, w);
-            }
-        }
+    if (representation == 0) {
+        // TODO
+    } else if (representation == 1) {
+        // TODO
+    } else if (representation == 2) {
+        fileStream << 'E' << ' ';
+        graphAsEdgesList.dump(fileStream);
     } else {
-        int a, b;
-        while (M-- > 0) {
-            input >> a >> b;
-            graph.addEdge(a, b, 1);
-            if (D == 0) {
-                graph.addEdge(b, a, 1);
-            }
-        }
+        throw invalid_argument("Unrecognizable format: " + to_string(representation));
     }
-
-}
-
-void load_as_adjustment_matrix(Graph &graph, ifstream &input, const function<void(const int)> &resize) {
-    // TODO
-}
-
-void load_as_adjustment_list(Graph &graph, ifstream &input, const function<void(const int)> &resize) {
-    // TODO
 }
