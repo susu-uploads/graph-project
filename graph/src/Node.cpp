@@ -6,18 +6,17 @@
 
 Node::Node(int name) : name(name) {}
 
-void Node::connect(int v, int weight) {
-    this->children.emplace_back(name, v, weight);
+void Node::connect(int vertice, int weight) {
+    this->children.insert(vertice, weight);
 }
 
 int Node::rebalance(int vertice, int new_weight) {
-    for (auto edge : children) {
-        int weight = edge.weight;
-        if (edge.to == vertice) {
-            edge.weight = new_weight;
-            return weight;
-        }
+    int old_weight = -1;
+    auto node = children.find(vertice);
+    if (node != children.end()) {
+        old_weight = node->second;
+        node->second = new_weight;
     }
-    return -1;
+    return old_weight;
 }
 

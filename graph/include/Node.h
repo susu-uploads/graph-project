@@ -5,16 +5,15 @@
 #ifndef GRAPH_PROJECT_NODE_H
 #define GRAPH_PROJECT_NODE_H
 
-#include <vector>
-#include "Edge.h"
+#include <map>
 
 struct Node {
     int name;
-    std::vector<Edge> children{};
+    std::map<int, int> children{};
 
     explicit Node(int name);
 
-    void connect(int v, int weight = 0);
+    void connect(int vertice, int weight = 0);
 
     int rebalance(int vertice, int new_weight);
 };

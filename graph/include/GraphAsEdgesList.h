@@ -9,10 +9,12 @@
 #include <vector>
 #include <fstream>
 #include "Edge.h"
+#include "Node.h"
 
 class GraphAsEdgesList {
 protected:
     std::vector<Edge> holder;
+    std::vector<Edge> reverse_holder;
     int size;
     int weighted;
     int directed;
@@ -26,6 +28,10 @@ public:
     void load(std::ifstream &input);
 
     void dump(std::ofstream &output);
+
+    void from(const std::vector<Node>& data, int s, int w, int d);
+
+    void from(const std::vector<std::vector<int>>& data, int s, int w, int d);
 
     ~GraphAsEdgesList();
 };

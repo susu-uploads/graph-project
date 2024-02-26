@@ -1,4 +1,3 @@
-#include <iostream>
 #include "graph/include/Graph.h"
 
 using namespace std;

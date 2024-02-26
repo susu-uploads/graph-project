@@ -17,10 +17,10 @@ void Graph::readGraph(const std::string &fileName) {
     fileStream >> inputType;
     if (inputType == 'C') {
         representation = 0;
-        // TODO
+        graphAsAdjMatrix.load(fileStream);
     } else if (inputType == 'L') {
         representation = 1;
-        // TODO
+        graphAsAdjList.load(fileStream);
     } else if (inputType == 'E') {
         representation = 2;
         graphAsEdgesList.load(fileStream);
@@ -57,9 +57,11 @@ void Graph::transformToListOfEdges() {
 void Graph::writeGraph(const std::string &fileName) {
     ofstream fileStream{fileName, ios_base::out};
     if (representation == 0) {
-        // TODO
+        fileStream << 'C' << ' ';
+        graphAsAdjMatrix.dump(fileStream);
     } else if (representation == 1) {
-        // TODO
+        fileStream << 'L' << ' ';
+        graphAsAdjList.dump(fileStream);
     } else if (representation == 2) {
         fileStream << 'E' << ' ';
         graphAsEdgesList.dump(fileStream);
