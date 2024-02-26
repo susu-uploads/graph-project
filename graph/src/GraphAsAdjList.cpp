@@ -17,11 +17,14 @@ int GraphAsAdjList::changeEdge(int from, int to, int newWeight) {
 }
 
 void GraphAsAdjList::load(std::ifstream &input) {
-    int N, M, D, W;
-    input >> N >> M >> D >> W;
+    int N, D, W;
+    input >> N >> D >> W;
     size = N;
     directed = D;
     weighted = W;
+    for (int i = 0; i < N; i++) {
+        holder.emplace_back(i);
+    }
     // TODO
 }
 

@@ -11,7 +11,7 @@
 
 class GraphAsAdjMatrix {
 protected:
-    std::vector<std::vector<int>> adjustmentMatrix;
+    std::vector<std::vector<int>> holder;
     int size;
     int weighted;
     int directed;

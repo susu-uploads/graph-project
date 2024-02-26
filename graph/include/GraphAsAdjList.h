@@ -13,7 +13,7 @@
 
 class GraphAsAdjList {
 protected:
-    std::vector<Node> adjustmentList;
+    std::vector<Node> holder;
     int size;
     int weighted;
     int directed;
