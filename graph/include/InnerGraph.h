@@ -18,18 +18,20 @@ protected:
     int weighted{};
     int directed{};
 
-    virtual void init(int s, int d, int w) = 0;
+    virtual void init(int s, int d, int w) {}
 
 public:
-    virtual void addEdge(int from, int to, int weight) = 0;
+    virtual void addEdge(int from, int to, int weight) {}
 
-    virtual void removeEdge(int from, int to) = 0;
+    virtual void removeEdge(int from, int to) {}
 
-    virtual int changeEdge(int from, int to, int newWeight) = 0;
+    virtual int changeEdge(int from, int to, int newWeight) {
+        return -1;
+    }
 
-    virtual void load(std::ifstream &input) = 0;
+    virtual void load(std::ifstream &input) {}
 
-    virtual void dump(std::ofstream &output) = 0;
+    virtual void dump(std::ofstream &output) {}
 };
 
 #endif //GRAPH_PROJECT_INNERGRAPH_H

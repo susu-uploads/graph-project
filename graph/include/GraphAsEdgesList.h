@@ -12,7 +12,7 @@
 #include "Node.h"
 #include "InnerGraph.h"
 
-class GraphAsEdgesList : protected InnerGraph {
+class GraphAsEdgesList : public InnerGraph {
 private:
     std::vector<Edge> holder;
 protected:

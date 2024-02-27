@@ -11,7 +11,7 @@
 #include "Node.h"
 #include "InnerGraph.h"
 
-class GraphAsAdjList : protected InnerGraph {
+class GraphAsAdjList : public InnerGraph {
 private:
     std::vector<Node> holder;
 protected:

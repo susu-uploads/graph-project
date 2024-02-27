@@ -10,7 +10,7 @@
 #include <fstream>
 #include "InnerGraph.h"
 
-class GraphAsAdjMatrix : protected InnerGraph {
+class GraphAsAdjMatrix : public InnerGraph {
 private:
     std::vector<std::vector<int>> holder;
 protected:

@@ -15,10 +15,10 @@
 
 class Graph {
 private:
-    int representation;
-    GraphAsAdjMatrix graphAsAdjMatrix;
-    GraphAsAdjList graphAsAdjList;
-    GraphAsEdgesList graphAsEdgesList;
+    int representation{};
+    int viewer{};
+    InnerGraph *innerGraph;
+
 public:
     void readGraph(const std::string &n);
 

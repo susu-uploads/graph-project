@@ -6,6 +6,10 @@
 #include <functional>
 #include "../include/Graph.h"
 
+#define ADJUSTMENT_MATRIX 0
+#define ADJUSTMENT_LIST 1
+#define EDGES_LIST 2
+
 using namespace std;
 
 void Graph::readGraph(const std::string &fileName) {
@@ -16,56 +20,63 @@ void Graph::readGraph(const std::string &fileName) {
     char inputType;
     fileStream >> inputType;
     if (inputType == 'C') {
-        representation = 0;
-        graphAsAdjMatrix.load(fileStream);
+        representation = ADJUSTMENT_MATRIX;
+        viewer = ADJUSTMENT_MATRIX;
+        auto g = GraphAsAdjMatrix{};
+        innerGraph = &g;
     } else if (inputType == 'L') {
-        representation = 1;
-        graphAsAdjList.load(fileStream);
+        representation = ADJUSTMENT_LIST;
+        viewer = ADJUSTMENT_LIST;
+        auto g = GraphAsAdjList{};
+        innerGraph = &g;
     } else if (inputType == 'E') {
-        representation = 2;
-        graphAsEdgesList.load(fileStream);
+        representation = EDGES_LIST;
+        viewer = EDGES_LIST;
+        auto g = GraphAsEdgesList{};
+        innerGraph = &g;
     } else {
         throw invalid_argument("Unrecognizable format: " + to_string(inputType));
     }
+    innerGraph->load(fileStream);
 }
 
 void Graph::addEdge(int from, int to, int weight) {
-    // TODO
+    innerGraph->addEdge(from, to, weight);
 }
 
 void Graph::removeEdge(int from, int to) {
-    // TODO
+    innerGraph->removeEdge(from, to);
 }
 
 int Graph::changeEdge(int from, int to, int newWeight) {
-    // TODO
-    return 0;
+    return innerGraph->changeEdge(from, to, newWeight);
 }
 
 void Graph::transformToAdjMatrix() {
-    representation = 0;
+    viewer = ADJUSTMENT_MATRIX;
 }
 
 void Graph::transformToAdjList() {
-    representation = 1;
+    viewer = ADJUSTMENT_LIST;
 }
 
 void Graph::transformToListOfEdges() {
-    representation = 2;
+    viewer = EDGES_LIST;
 }
 
 void Graph::writeGraph(const std::string &fileName) {
     ofstream fileStream{fileName, ios_base::out};
-    if (representation == 0) {
+    if (viewer == ADJUSTMENT_MATRIX) {
         fileStream << 'C' << ' ';
-        graphAsAdjMatrix.dump(fileStream);
-    } else if (representation == 1) {
+
+    } else if (viewer == ADJUSTMENT_LIST) {
         fileStream << 'L' << ' ';
-        graphAsAdjList.dump(fileStream);
-    } else if (representation == 2) {
+
+    } else if (viewer == EDGES_LIST) {
         fileStream << 'E' << ' ';
-        graphAsEdgesList.dump(fileStream);
+
     } else {
         throw invalid_argument("Unrecognizable format: " + to_string(representation));
     }
+    innerGraph->dump(fileStream);
 }
