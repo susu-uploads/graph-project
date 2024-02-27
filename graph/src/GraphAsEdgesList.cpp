@@ -29,7 +29,7 @@ void GraphAsEdgesList::removeEdge(int from, int to) {
 
 int GraphAsEdgesList::changeEdge(int from, int to, int newWeight) {
     int old_weight = -1;
-    for (auto & edge : holder) {
+    for (auto &edge : holder) {
         if (directed == NOT_DIRECTED) {
             if (edge.from == from && edge.to == to || edge.from == to && edge.to == from) {
                 old_weight = edge.weight;
@@ -89,7 +89,7 @@ bool is_not_duplicate(vector<set<int>> &used, int v, int w) {
     return flag;
 }
 
-void GraphAsEdgesList::load(int s, int w, int d, const std::vector<Node> &data) {
+void GraphAsEdgesList::load(int s, int d, int w, const std::vector<Node> &data) {
     init(s, d, w);
     if (directed == NOT_DIRECTED) {
         vector<set<int>> used(size);
@@ -109,18 +109,22 @@ void GraphAsEdgesList::load(int s, int w, int d, const std::vector<Node> &data) 
     }
 }
 
-void GraphAsEdgesList::load(int s, int w, int d, const std::vector<std::vector<int>> &data) {
+void GraphAsEdgesList::load(int s, int d, int w, const std::vector<std::vector<int>> &data) {
     init(s, d, w);
     if (directed == NOT_DIRECTED) {
         for (int i = 0; i < size; i++) {
             for (int j = i; j < size; j++) {
-                holder.emplace_back(i, j, data[i][j]);
+                if (data[i][j] != 0) {
+                    holder.emplace_back(i, j, data[i][j]);
+                }
             }
         }
     } else if (directed == DIRECTED) {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                holder.emplace_back(i, j, data[i][j]);
+                if (data[i][j] != 0) {
+                    holder.emplace_back(i, j, data[i][j]);
+                }
             }
         }
     }

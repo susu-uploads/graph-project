@@ -8,7 +8,7 @@
 struct Edge {
     int from, to, weight;
 
-    Edge(int v, int w, int length = 0);
+    Edge(int v, int w, int length = 1);
 };
 
 #endif //GRAPH_PROJECT_EDGE_H
