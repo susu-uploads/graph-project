@@ -13,7 +13,7 @@ struct Node {
 
     explicit Node(int name);
 
-    void connect(int vertice, int weight = 0);
+    void connect(int vertice, int weight = 1);
 
     int rebalance(int vertice, int new_weight);
 };

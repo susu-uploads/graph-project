@@ -3,6 +3,7 @@
 //
 
 #include <sstream>
+#include <Edge.h>
 #include "GraphAsAdjList.h"
 
 using namespace std;
@@ -37,37 +38,31 @@ void GraphAsAdjList::removeEdge(int from, int to) {
 }
 
 int GraphAsAdjList::changeEdge(int from, int to, int newWeight) {
-    auto pair = holder[from].children.find(to);
-    int old_weight = pair->second;
-    pair->second = newWeight;
-    return old_weight;
+    return holder[from].rebalance(to, newWeight);
 }
 
 void GraphAsAdjList::load(std::ifstream &input) {
+    // Init fields
     int N, D, W;
     input >> N >> D >> W;
-    size = N;
-    directed = D;
-    weighted = W;
-    for (int i = 0; i < N; i++) {
-        holder.emplace_back(i);
-    }
-    if (weighted) {
-        for (int i = 0; i < N; i++) {
-            std::string line;
-            getline(input, line);
-            auto data = parseWithWeight(line);
-            for (std::pair<int, int> vertice : data) {
-                holder[i].connect(vertice.first, vertice.second);
-            }
-        }
-    } else {
-        for (int i = 0; i < N; i++) {
+    init(N, D, W);
+    // Read data
+    if (weighted == NOT_WEIGHTED) {
+        for (int i = 0; i < size; i++) {
             std::string line;
             getline(input, line);
             auto data = parseWithoutWeight(line);
             for (int vertice : data) {
                 holder[i].connect(vertice);
+            }
+        }
+    } else if (weighted == WEIGHTED) {
+        for (int i = 0; i < size; i++) {
+            std::string line;
+            getline(input, line);
+            auto data = parseWithWeight(line);
+            for (std::pair<int, int> vertice : data) {
+                holder[i].connect(vertice.first, vertice.second);
             }
         }
     }
@@ -84,5 +79,38 @@ void GraphAsAdjList::dump(std::ofstream &output) {
             }
         }
         output << '\n';
+    }
+}
+
+void GraphAsAdjList::load(int s, int d, int w, const std::vector<std::vector<int>> &data) {
+    init(s, d, w);
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            addEdge(i, j, data[i][j]);
+        }
+    }
+}
+
+void GraphAsAdjList::load(int s, int d, int w, const std::vector<Edge> &data) {
+    init(s, d, w);
+    if (directed == NOT_DIRECTED) {
+        for (Edge edge : data) {
+            addEdge(edge.from, edge.to, edge.weight);
+            addEdge(edge.to, edge.from, edge.weight);
+        }
+    } else if (directed == DIRECTED) {
+        for (Edge edge : data) {
+            addEdge(edge.from, edge.to, edge.weight);
+        }
+    }
+}
+
+void GraphAsAdjList::init(int s, int d, int w) {
+    size = s;
+    directed = d;
+    weighted = w;
+    holder.clear();
+    for (int i = 0; i < size; i++) {
+        holder.emplace_back(i);
     }
 }

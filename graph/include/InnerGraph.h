@@ -7,11 +7,19 @@
 
 #include <fstream>
 
+#define NOT_DIRECTED 0
+#define DIRECTED 1
+#define NOT_WEIGHTED 0
+#define WEIGHTED 1
+
 class InnerGraph {
 protected:
     int size{};
     int weighted{};
     int directed{};
+
+    virtual void init(int s, int d, int w) = 0;
+
 public:
     virtual void addEdge(int from, int to, int weight) = 0;
 

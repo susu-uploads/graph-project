@@ -11,12 +11,9 @@ void Node::connect(int vertice, int weight) {
 }
 
 int Node::rebalance(int vertice, int new_weight) {
-    int old_weight = -1;
-    auto node = children.find(vertice);
-    if (node != children.end()) {
-        old_weight = node->second;
-        node->second = new_weight;
-    }
+    auto pair = children.find(vertice);
+    int old_weight = pair->second;
+    pair->second = new_weight;
     return old_weight;
 }
 

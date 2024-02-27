@@ -13,6 +13,9 @@
 class GraphAsAdjMatrix : protected InnerGraph {
 private:
     std::vector<std::vector<int>> holder;
+protected:
+    void init(int s, int d, int w) override;
+
 public:
     void addEdge(int from, int to, int weight) override;
 
@@ -23,6 +26,10 @@ public:
     void load(std::ifstream &input) override;
 
     void dump(std::ofstream &output) override;
+
+    void load(int s, int d, int w, const std::vector<Edge> &data);
+
+    void load(int s, int d, int w, const std::vector<Node> &data);
 };
 
 

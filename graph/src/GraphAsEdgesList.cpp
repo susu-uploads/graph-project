@@ -17,20 +17,45 @@ void GraphAsEdgesList::addEdge(int from, int to, int weight) {
 }
 
 void GraphAsEdgesList::removeEdge(int from, int to) {
-    if (directed == NOT_DIRECTED) {
-        // TODO
-    } else if (directed == DIRECTED) {
-        // TODO
+    for (auto edge = holder.begin(); edge != holder.end(); edge++) {
+        if (directed == NOT_DIRECTED) {
+            if (edge->from == from && edge->to == to || edge->from == to && edge->to == from) {
+                holder.erase(edge);
+                return;
+            }
+        } else if (directed == DIRECTED) {
+            if (edge->from == from && edge->to == to) {
+                holder.erase(edge);
+                return;
+            }
+        }
     }
 }
 
 int GraphAsEdgesList::changeEdge(int from, int to, int newWeight) {
-    return 0;
+    int old_weight = -1;
+    for (auto & edge : holder) {
+        if (directed == NOT_DIRECTED) {
+            if (edge.from == from && edge.to == to || edge.from == to && edge.to == from) {
+                old_weight = edge.weight;
+                edge.weight = newWeight;
+                return old_weight;
+            }
+        } else if (directed == DIRECTED) {
+            if (edge.from == from && edge.to == to) {
+                old_weight = edge.weight;
+                edge.weight = newWeight;
+                return old_weight;
+            }
+        }
+    }
+    return old_weight;
 }
 
 void GraphAsEdgesList::load(std::ifstream &input) {
-    int M;
-    input >> size >> M >> directed >> weighted;
+    int N, M, D, W;
+    input >> N >> M >> D >> W;
+    init(N, D, W);
     if (weighted == NOT_WEIGHTED) {
         int a, b;
         while (M-- > 0) {
@@ -69,11 +94,8 @@ bool is_not_duplicate(vector<set<int>> &used, int v, int w) {
     return flag;
 }
 
-void GraphAsEdgesList::from(const std::vector<Node> &data, int s, int w, int d) {
-    size = s;
-    weighted = w;
-    directed = d;
-    holder.clear();
+void GraphAsEdgesList::load(int s, int w, int d, const std::vector<Node> &data) {
+    init(s, d, w);
     if (directed == NOT_DIRECTED) {
         vector<set<int>> used(size);
         for (const auto &node : data) {
@@ -92,11 +114,8 @@ void GraphAsEdgesList::from(const std::vector<Node> &data, int s, int w, int d) 
     }
 }
 
-void GraphAsEdgesList::from(const std::vector<std::vector<int>> &data, int s, int w, int d) {
-    size = s;
-    weighted = w;
-    directed = d;
-    holder.clear();
+void GraphAsEdgesList::load(int s, int w, int d, const std::vector<std::vector<int>> &data) {
+    init(s, d, w);
     if (directed == NOT_DIRECTED) {
         for (int i = 0; i < size; i++) {
             for (int j = i; j < size; j++) {
@@ -110,4 +129,11 @@ void GraphAsEdgesList::from(const std::vector<std::vector<int>> &data, int s, in
             }
         }
     }
+}
+
+void GraphAsEdgesList::init(int s, int d, int w) {
+    size = s;
+    weighted = w;
+    directed = d;
+    holder.clear();
 }
