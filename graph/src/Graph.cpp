@@ -12,9 +12,9 @@
 
 using namespace std;
 
-void Graph::readGraph(const std::string &fileName) {
+void Graph::readGraph(const std::string &n) {
     // Open stream
-    ifstream fileStream{fileName, ios_base::in};
+    ifstream fileStream{n, ios_base::in};
     // Discovering what input pattern is
     char inputType;
     fileStream >> inputType;

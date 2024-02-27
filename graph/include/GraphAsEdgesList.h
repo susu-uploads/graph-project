@@ -28,9 +28,9 @@ public:
 
     void dump(std::ofstream &output) override;
 
-    void load(int s, int w, int d, const std::vector<Node> &data);
+    void load(int s, int d, int w, const std::vector<Node> &data);
 
-    void load(int s, int w, int d, const std::vector<std::vector<int>> &data);
+    void load(int s, int d, int w, const std::vector<std::vector<int>> &data);
 };
 
 
