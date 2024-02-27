@@ -55,13 +55,13 @@ void GraphAsEdgesList::load(std::ifstream &input) {
         int a, b;
         while (M-- > 0) {
             input >> a >> b;
-            holder.emplace_back(a - 1, b - 1);
+            addEdge(a - 1, b - 1, 1);
         }
     } else if (weighted == WEIGHTED) {
         int a, b, w;
         while (M-- > 0) {
             input >> a >> b >> w;
-            holder.emplace_back(a - 1, b - 1, w);
+            addEdge(a - 1, b - 1, w);
         }
     }
 }
@@ -80,13 +80,11 @@ void GraphAsEdgesList::dump(std::ofstream &output) {
     }
 }
 
-bool is_not_duplicate(vector<set<int>> &used, int v, int w) {
-    bool flag = !(used[v].find(w) != used[v].end() || used[w].find(v) != used[w].end());
-    if (flag) {
-        used[v].insert(w);
-        used[w].insert(v);
-    }
-    return flag;
+bool check_if_duplicate(vector<set<int>> &used, int v, int w) {
+    bool is_duplicate = (used[v].find(w) != used[v].end()) || (used[w].find(v) != used[w].end());
+    used[v].insert(w);
+    used[w].insert(v);
+    return is_duplicate;
 }
 
 void GraphAsEdgesList::load(int s, int d, int w, const std::vector<Node> &data) {
@@ -95,15 +93,15 @@ void GraphAsEdgesList::load(int s, int d, int w, const std::vector<Node> &data) 
         vector<set<int>> used(size);
         for (const auto &node : data) {
             for (auto edge : node.children) {
-                if (is_not_duplicate(used, node.name, edge.first)) {
-                    holder.emplace_back(node.name, edge.first, edge.second);
+                if (!check_if_duplicate(used, node.name, edge.first)) {
+                    addEdge(node.name, edge.first, edge.second);
                 }
             }
         }
     } else if (directed == DIRECTED) {
         for (const auto &node : data) {
             for (auto edge : node.children) {
-                holder.emplace_back(node.name, edge.first, edge.second);
+                addEdge(node.name, edge.first, edge.second);
             }
         }
     }
@@ -115,7 +113,7 @@ void GraphAsEdgesList::load(int s, int d, int w, const std::vector<std::vector<i
         for (int i = 0; i < size; i++) {
             for (int j = i; j < size; j++) {
                 if (data[i][j] != 0) {
-                    holder.emplace_back(i, j, data[i][j]);
+                    addEdge(i, j, data[i][j]);
                 }
             }
         }
@@ -123,7 +121,7 @@ void GraphAsEdgesList::load(int s, int d, int w, const std::vector<std::vector<i
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (data[i][j] != 0) {
-                    holder.emplace_back(i, j, data[i][j]);
+                    addEdge(i, j, data[i][j]);
                 }
             }
         }

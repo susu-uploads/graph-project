@@ -46,23 +46,23 @@ void GraphAsAdjList::load(std::ifstream &input) {
     int N, D, W;
     input >> N >> D >> W;
     init(N, D, W);
+    std::string line;
+    getline(input, line);
     // Read data
     if (weighted == NOT_WEIGHTED) {
         for (int i = 0; i < size; i++) {
-            std::string line;
             getline(input, line);
             auto data = parseWithoutWeight(line);
             for (int vertice : data) {
-                holder[i].connect(vertice);
+                addEdge(i, vertice - 1, 1);
             }
         }
     } else if (weighted == WEIGHTED) {
         for (int i = 0; i < size; i++) {
-            std::string line;
             getline(input, line);
             auto data = parseWithWeight(line);
             for (std::pair<int, int> vertice : data) {
-                holder[i].connect(vertice.first, vertice.second);
+                addEdge(i, vertice.first - 1, vertice.second);
             }
         }
     }
@@ -73,7 +73,7 @@ void GraphAsAdjList::dump(std::ofstream &output) {
     output << directed << ' ' << weighted << '\n';
     for (const Node &node : holder) {
         for (std::pair<int, int> edge : node.children) {
-            output << edge.first << ' ';
+            output << edge.first + 1 << ' ';
             if (weighted) {
                 output << edge.second << ' ';
             }
