@@ -11,7 +11,7 @@ set(
         include/Graph.h
         include/Edge.h
         include/Node.h
-        include/GraphAsEdgesList.h src/GraphAsAdjMatrix.cpp include/GraphAsAdjMatrix.h src/GraphAsAdjList.cpp include/GraphAsAdjList.h)
+        include/GraphAsEdgesList.h src/GraphAsAdjMatrix.cpp include/GraphAsAdjMatrix.h src/GraphAsAdjList.cpp include/GraphAsAdjList.h include/InnerGraph.h)
 
 add_library(${LIBRARY_NAME} STATIC ${SOURCE_FILES} ${HEADER_FILES})
 

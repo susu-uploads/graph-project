@@ -111,5 +111,3 @@ void GraphAsEdgesList::from(const std::vector<std::vector<int>> &data, int s, in
         }
     }
 }
-
-GraphAsEdgesList::~GraphAsEdgesList() = default;

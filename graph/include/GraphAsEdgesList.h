@@ -10,30 +10,25 @@
 #include <fstream>
 #include "Edge.h"
 #include "Node.h"
+#include "InnerGraph.h"
 
-class GraphAsEdgesList {
-protected:
+class GraphAsEdgesList : protected InnerGraph {
+private:
     std::vector<Edge> holder;
-    std::vector<Edge> reverse_holder;
-    int size;
-    int weighted;
-    int directed;
 public:
-    void addEdge(int from, int to, int weight = 0);
+    void addEdge(int from, int to, int weight) override;
 
-    void removeEdge(int from, int to);
+    void removeEdge(int from, int to) override;
 
-    int changeEdge(int from, int to, int newWeight);
+    int changeEdge(int from, int to, int newWeight) override;
 
-    void load(std::ifstream &input);
+    void load(std::ifstream &input) override;
 
-    void dump(std::ofstream &output);
+    void dump(std::ofstream &output) override;
 
     void from(const std::vector<Node>& data, int s, int w, int d);
 
     void from(const std::vector<std::vector<int>>& data, int s, int w, int d);
-
-    ~GraphAsEdgesList();
 };
 
 

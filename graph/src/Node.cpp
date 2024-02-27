@@ -7,7 +7,7 @@
 Node::Node(int name) : name(name) {}
 
 void Node::connect(int vertice, int weight) {
-    this->children.insert(vertice, weight);
+    this->children.insert(std::pair<int, int>{vertice, weight});
 }
 
 int Node::rebalance(int vertice, int new_weight) {

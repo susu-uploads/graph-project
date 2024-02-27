@@ -8,25 +8,21 @@
 
 #include <vector>
 #include <fstream>
+#include "InnerGraph.h"
 
-class GraphAsAdjMatrix {
-protected:
+class GraphAsAdjMatrix : protected InnerGraph {
+private:
     std::vector<std::vector<int>> holder;
-    int size;
-    int weighted;
-    int directed;
 public:
-    void addEdge(int from, int to, int weight = 0);
+    void addEdge(int from, int to, int weight) override;
 
-    void removeEdge(int from, int to);
+    void removeEdge(int from, int to) override;
 
-    int changeEdge(int from, int to, int newWeight);
+    int changeEdge(int from, int to, int newWeight) override;
 
-    void load(std::ifstream &input);
+    void load(std::ifstream &input) override;
 
-    void dump(std::ofstream &output);
-
-    ~GraphAsAdjMatrix();
+    void dump(std::ofstream &output) override;
 };
 
 

@@ -4,16 +4,20 @@
 
 #include "GraphAsAdjMatrix.h"
 
-void GraphAsAdjMatrix::addEdge(int from, int to, int weight) {
+using namespace std;
 
+void GraphAsAdjMatrix::addEdge(int from, int to, int weight) {
+    holder[from][to] = weight;
 }
 
 void GraphAsAdjMatrix::removeEdge(int from, int to) {
-
+    holder[from][to] = 0;
 }
 
 int GraphAsAdjMatrix::changeEdge(int from, int to, int newWeight) {
-    return 0;
+    int old_weight = holder[from][to];
+    holder[from][to] = newWeight;
+    return old_weight;
 }
 
 void GraphAsAdjMatrix::load(std::ifstream &input) {
@@ -22,7 +26,7 @@ void GraphAsAdjMatrix::load(std::ifstream &input) {
     size = N;
     directed = D;
     weighted = W;
-    holder.resize(N, std::vector<int>(N));
+    holder.resize(N, vector<int>(N));
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             input >> holder[i][j];
@@ -43,5 +47,3 @@ void GraphAsAdjMatrix::dump(std::ofstream &output) {
         output << '\n';
     }
 }
-
-GraphAsAdjMatrix::~GraphAsAdjMatrix() = default;

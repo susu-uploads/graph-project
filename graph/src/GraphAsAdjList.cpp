@@ -5,10 +5,12 @@
 #include <sstream>
 #include "GraphAsAdjList.h"
 
+using namespace std;
+
 std::vector<int> parseWithoutWeight(const std::string &line) {
-    std::vector<int> data;
+    vector<int> data;
     int token;
-    std::istringstream token_stream(line);
+    istringstream token_stream(line);
     while (token_stream >> token) {
         data.push_back(token);
     }
@@ -16,10 +18,10 @@ std::vector<int> parseWithoutWeight(const std::string &line) {
 }
 
 std::vector<std::pair<int, int>> parseWithWeight(const std::string &line) {
-    std::vector<std::pair<int, int>> data;
+    vector<pair<int, int>> data;
     int token1;
     int token2;
-    std::istringstream token_stream(line);
+    istringstream token_stream(line);
     while (token_stream >> token1 >> token2) {
         data.emplace_back(token1, token2);
     }
@@ -27,15 +29,18 @@ std::vector<std::pair<int, int>> parseWithWeight(const std::string &line) {
 }
 
 void GraphAsAdjList::addEdge(int from, int to, int weight) {
-
+    holder[from].children.insert(pair<int, int>{to, weight});
 }
 
 void GraphAsAdjList::removeEdge(int from, int to) {
-
+    holder[from].children.erase(to);
 }
 
 int GraphAsAdjList::changeEdge(int from, int to, int newWeight) {
-    return 0;
+    auto pair = holder[from].children.find(to);
+    int old_weight = pair->second;
+    pair->second = newWeight;
+    return old_weight;
 }
 
 void GraphAsAdjList::load(std::ifstream &input) {
@@ -81,5 +86,3 @@ void GraphAsAdjList::dump(std::ofstream &output) {
         output << '\n';
     }
 }
-
-GraphAsAdjList::~GraphAsAdjList() = default;
