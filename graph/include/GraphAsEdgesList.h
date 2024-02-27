@@ -13,12 +13,11 @@
 #include "InnerGraph.h"
 
 class GraphAsEdgesList : public InnerGraph {
-private:
+public:
     std::vector<Edge> holder;
-protected:
+
     void init(int s, int d, int w) override;
 
-public:
     void addEdge(int from, int to, int weight) override;
 
     void removeEdge(int from, int to) override;

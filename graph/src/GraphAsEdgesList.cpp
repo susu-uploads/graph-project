@@ -5,11 +5,6 @@
 #include "GraphAsEdgesList.h"
 #include <set>
 
-#define NOT_DIRECTED 0
-#define DIRECTED 1
-#define NOT_WEIGHTED 0
-#define WEIGHTED 1
-
 using namespace std;
 
 void GraphAsEdgesList::addEdge(int from, int to, int weight) {

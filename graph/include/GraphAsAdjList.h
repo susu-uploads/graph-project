@@ -12,12 +12,11 @@
 #include "InnerGraph.h"
 
 class GraphAsAdjList : public InnerGraph {
-private:
+public:
     std::vector<Node> holder;
-protected:
+
     void init(int s, int d, int w) override;
 
-public:
     void addEdge(int from, int to, int weight) override;
 
     void removeEdge(int from, int to) override;

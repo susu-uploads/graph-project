@@ -15,7 +15,6 @@ using namespace std;
 void Graph::readGraph(const std::string &fileName) {
     // Open stream
     ifstream fileStream{fileName, ios_base::in};
-
     // Discovering what input pattern is
     char inputType;
     fileStream >> inputType;
@@ -68,13 +67,13 @@ void Graph::writeGraph(const std::string &fileName) {
     ofstream fileStream{fileName, ios_base::out};
     if (viewer == ADJUSTMENT_MATRIX) {
         fileStream << 'C' << ' ';
-
+        // TODO
     } else if (viewer == ADJUSTMENT_LIST) {
         fileStream << 'L' << ' ';
-
+        // TODO
     } else if (viewer == EDGES_LIST) {
         fileStream << 'E' << ' ';
-
+        // TODO
     } else {
         throw invalid_argument("Unrecognizable format: " + to_string(representation));
     }

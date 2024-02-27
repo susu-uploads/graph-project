@@ -13,14 +13,13 @@
 #define WEIGHTED 1
 
 class InnerGraph {
-protected:
+public:
     int size{};
     int weighted{};
     int directed{};
 
     virtual void init(int s, int d, int w) {}
 
-public:
     virtual void addEdge(int from, int to, int weight) {}
 
     virtual void removeEdge(int from, int to) {}
