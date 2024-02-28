@@ -16,8 +16,6 @@ class GraphAsEdgesList : public InnerGraph {
 public:
     std::vector<Edge> holder;
 
-    void init(int s, int d, int w) override;
-
     void addEdge(int from, int to, int weight) override;
 
     void removeEdge(int from, int to) override;
@@ -31,6 +29,9 @@ public:
     void load(int s, int d, int w, const std::vector<Node> &data);
 
     void load(int s, int d, int w, const std::vector<std::vector<int>> &data);
+
+protected:
+    void init(int s, int d, int w) override;
 };
 
 

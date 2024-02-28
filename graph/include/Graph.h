@@ -17,9 +17,7 @@ class Graph {
 private:
     int representation{};
     int viewer{};
-    GraphAsAdjMatrix c;
-    GraphAsAdjList l;
-    GraphAsEdgesList e;
+    InnerGraph *innerGraph = nullptr;
 public:
     void readGraph(const std::string &n);
 

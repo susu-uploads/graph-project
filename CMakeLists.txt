@@ -5,7 +5,6 @@ set(PROJECT_NAME graph_project)
 set(
         SOURCE_FILES
         main.cpp
-        result.cpp
 )
 
 project(${PROJECT_NAME})
