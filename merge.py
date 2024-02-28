@@ -55,10 +55,30 @@ def write_graph(file: TextIO):
     write_default(file, GRAPH_S)
 
 
+def write_main(file: TextIO):
+    file.write("""
+#define IN "in.txt"
+#define OUT "out.txt"
+
+int main() {
+    Graph g;
+    g.readGraph(IN);
+    g.transformToAdjMatrix();
+    g.transformToAdjList();
+    g.transformToListOfEdges();
+    g.transformToAdjMatrix();
+    g.transformToAdjList();
+    g.transformToListOfEdges();
+    g.writeGraph(OUT);
+}
+    """)
+
+
 if __name__ == "__main__":
     file: TextIO = open("result.cpp", "w")
     write_edge(file)
     write_node(file)
     write_util_graph(file)
     write_graph(file)
+    write_main(file)
     file.close()

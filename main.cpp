@@ -35,6 +35,9 @@ void test_1() {
     g.transformToAdjMatrix();
     g.transformToAdjList();
     g.transformToListOfEdges();
+    g.transformToAdjMatrix();
+    g.transformToAdjList();
+    g.transformToListOfEdges();
     g.writeGraph(OUT_1);
 }
 
