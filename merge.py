@@ -1,62 +1,32 @@
-from typing import Tuple, TextIO
+import os
+import re
+from functools import reduce
+from typing import Tuple, TextIO, List, Pattern
 
-EDGE_H: str = "graph/include/Edge.h"
-EDGE_S: str = "graph/src/Edge.cpp"
+FORBIDDEN_LINES: List[str] = [
+    r"#include [\" | \<].*.h[\" | \>]",
+    r"\/\/.*",
+    r"#ifndef.*",
+    r"#endif.*"
+]
 
-NODE_H: str = "graph/include/Node.h"
-NODE_S: str = "graph/src/Node.cpp"
+NAMESPACES_ORDER: List[str] = [
+    "Edge.h",
+    "Edge.cpp",
+    "Node.h",
+    "Node.cpp",
+    "InnerGraph.h",
+    "GraphAsAdjList.h",
+    "GraphAsAdjList.cpp",
+    "GraphAsAdjMatrix.h",
+    "GraphAsAdjMatrix.cpp",
+    "GraphAsEdgesList.h",
+    "GraphAsEdgesList.cpp",
+    "Graph.h",
+    "Graph.cpp"
+]
 
-INNER_GRAPH_H: str = "graph/include/InnerGraph.h"
-
-ADJ_LIST_GRAPH_H: str = "graph/include/GraphAsAdjList.h"
-ADJ_LIST_GRAPH_S: str = "graph/src/GraphAsAdjList.cpp"
-
-ADJ_MATRIX_H: str = "graph/include/GraphAsAdjMatrix.h"
-ADJ_MATRIX_S: str = "graph/src/GraphAsAdjMatrix.cpp"
-
-EDJ_LIST_H: str = "graph/include/GraphAsEdgesList.h"
-EDJ_LIST_S: str = "graph/src/GraphAsEdgesList.cpp"
-
-GRAPH_H: str = "graph/include/Graph.h"
-GRAPH_S: str = "graph/src/Graph.cpp"
-
-
-def write_default(file: TextIO, source_name: str):
-    source: TextIO = open(source_name, "r")
-    lines = list(filter(lambda x: not x.startswith("//"), source.readlines()))
-    lines = list(filter(lambda x: not x.endswith(".h\"\n"), lines))
-    lines = list(filter(lambda x: not x.endswith(".h>\n"), lines))
-    file.writelines(lines)
-    source.close()
-
-
-def write_edge(file: TextIO):
-    write_default(file, EDGE_H)
-    write_default(file, EDGE_S)
-
-
-def write_node(file: TextIO):
-    write_default(file, NODE_H)
-    write_default(file, NODE_S)
-
-
-def write_util_graph(file: TextIO):
-    write_default(file, INNER_GRAPH_H)
-    write_default(file, ADJ_LIST_GRAPH_H)
-    write_default(file, ADJ_LIST_GRAPH_S)
-    write_default(file, ADJ_MATRIX_H)
-    write_default(file, ADJ_MATRIX_S)
-    write_default(file, EDJ_LIST_H)
-    write_default(file, EDJ_LIST_S)
-
-
-def write_graph(file: TextIO):
-    write_default(file, GRAPH_H)
-    write_default(file, GRAPH_S)
-
-
-def write_main(file: TextIO):
-    file.write("""
+MAIN_TEMPLATE: str = """
 #define IN "in.txt"
 #define OUT "out.txt"
 
@@ -71,14 +41,43 @@ int main() {
     g.transformToListOfEdges();
     g.writeGraph(OUT);
 }
-    """)
+"""
+
+flat_map = lambda f, xs: reduce(lambda a, b: a + b, map(f, xs))
+
+
+def as_source(path: str, patterns: List[Pattern[str]]) -> Tuple[int, List[str]]:
+    src_file: TextIO = open(path, "r")
+    src_lines: List[str] = list()
+    for line in src_file.readlines():
+        is_ok: bool = True
+        for pattern in patterns:
+            if pattern.match(line):
+                is_ok = False
+                break
+        if is_ok:
+            src_lines.append(line)
+
+    order: int = -1
+    name: str = path.split("/")[-1]  # TODO
+    for index, namespace in enumerate(NAMESPACES_ORDER):
+        if name == namespace:
+            order = index
+    return order, src_lines
 
 
 if __name__ == "__main__":
+    cwd: str = os.getcwd()
+    sources: List[Tuple[int, List[str]]] = list()
+    regexes = list(map(lambda x: re.compile(x), FORBIDDEN_LINES))
+
     file: TextIO = open("result.cpp", "w")
-    write_edge(file)
-    write_node(file)
-    write_util_graph(file)
-    write_graph(file)
-    write_main(file)
+    for path, subdirs, files in os.walk(os.path.join(cwd, "graph")):
+        for name in files:
+            if name in NAMESPACES_ORDER:
+                sources.append(as_source(os.path.join(path, name), regexes))
+    sources.sort(key=lambda x: x[0])
+    for lines in map(lambda x: x[1], sources):
+        file.writelines(lines)
+    file.write(MAIN_TEMPLATE)
     file.close()

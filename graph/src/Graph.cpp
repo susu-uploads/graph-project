@@ -20,15 +20,12 @@ void Graph::readGraph(const std::string &n) {
     fileStream >> inputType;
     if (inputType == 'C') {
         representation = ADJUSTMENT_MATRIX;
-        viewer = ADJUSTMENT_MATRIX;
         innerGraph = new GraphAsAdjMatrix;
     } else if (inputType == 'L') {
         representation = ADJUSTMENT_LIST;
-        viewer = ADJUSTMENT_LIST;
         innerGraph = new GraphAsAdjList;
     } else if (inputType == 'E') {
         representation = EDGES_LIST;
-        viewer = EDGES_LIST;
         innerGraph = new GraphAsEdgesList;
     } else {
         throw invalid_argument("Unrecognizable format: " + to_string(inputType));
@@ -49,58 +46,55 @@ int Graph::changeEdge(int from, int to, int newWeight) {
 }
 
 void Graph::transformToAdjMatrix() {
-    viewer = ADJUSTMENT_MATRIX;
+    auto new_graph = new GraphAsAdjMatrix;
+    if (representation == ADJUSTMENT_LIST) {
+        auto current_graph = dynamic_cast<GraphAsAdjList *>(innerGraph);
+        new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
+        innerGraph = new_graph;
+    } else if (representation == EDGES_LIST) {
+        auto current_graph = dynamic_cast<GraphAsEdgesList *>(innerGraph);
+        new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
+        innerGraph = new_graph;
+    }
+    representation = ADJUSTMENT_MATRIX;
 }
 
 void Graph::transformToAdjList() {
-    viewer = ADJUSTMENT_LIST;
+    auto new_graph = new GraphAsAdjList;
+    if (representation == ADJUSTMENT_MATRIX) {
+        auto current_graph = dynamic_cast<GraphAsAdjMatrix *>(innerGraph);
+        new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
+        innerGraph = new_graph;
+    } else if (representation == EDGES_LIST) {
+        auto current_graph = dynamic_cast<GraphAsEdgesList *>(innerGraph);
+        new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
+        innerGraph = new_graph;
+    }
+    representation = ADJUSTMENT_LIST;
 }
 
 void Graph::transformToListOfEdges() {
-    viewer = EDGES_LIST;
+    auto new_graph = new GraphAsEdgesList;
+    if (representation == ADJUSTMENT_MATRIX) {
+        auto current_graph = dynamic_cast<GraphAsAdjMatrix *>(innerGraph);
+        new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
+        innerGraph = new_graph;
+    } else if (representation == ADJUSTMENT_LIST) {
+        auto current_graph = dynamic_cast<GraphAsAdjList *>(innerGraph);
+        new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
+        innerGraph = new_graph;
+    }
+    representation = EDGES_LIST;
 }
 
 void Graph::writeGraph(const std::string &fileName) {
     ofstream fileStream{fileName, ios_base::out};
-    if (viewer == ADJUSTMENT_MATRIX) {
+    if (representation == ADJUSTMENT_MATRIX) {
         fileStream << 'C' << ' ';
-        auto new_graph = new GraphAsAdjMatrix;
-        if (representation == ADJUSTMENT_LIST) {
-            auto current_graph = dynamic_cast<GraphAsAdjList*>(innerGraph);
-            new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
-            innerGraph = new_graph;
-        } else if (representation == EDGES_LIST) {
-            auto current_graph = dynamic_cast<GraphAsEdgesList*>(innerGraph);
-            new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
-            innerGraph = new_graph;
-        }
-        representation = ADJUSTMENT_MATRIX;
-    } else if (viewer == ADJUSTMENT_LIST) {
+    } else if (representation == ADJUSTMENT_LIST) {
         fileStream << 'L' << ' ';
-        auto new_graph = new GraphAsAdjList;
-        if (representation == ADJUSTMENT_MATRIX) {
-            auto current_graph = dynamic_cast<GraphAsAdjMatrix*>(innerGraph);
-            new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
-            innerGraph = new_graph;
-        } else if (representation == EDGES_LIST) {
-            auto current_graph = dynamic_cast<GraphAsEdgesList*>(innerGraph);
-            new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
-            innerGraph = new_graph;
-        }
-        representation = ADJUSTMENT_LIST;
-    } else if (viewer == EDGES_LIST) {
+    } else if (representation == EDGES_LIST) {
         fileStream << 'E' << ' ';
-        auto new_graph = new GraphAsEdgesList;
-        if (representation == ADJUSTMENT_MATRIX) {
-            auto current_graph = dynamic_cast<GraphAsAdjMatrix*>(innerGraph);
-            new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
-            innerGraph = new_graph;
-        } else if (representation == ADJUSTMENT_LIST) {
-            auto current_graph = dynamic_cast<GraphAsAdjList*>(innerGraph);
-            new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
-            innerGraph = new_graph;
-        }
-        representation = EDGES_LIST;
     }
     innerGraph->dump(fileStream);
 }
