@@ -16,7 +16,6 @@
 class Graph {
 private:
     int representation{};
-    int viewer{};
     InnerGraph *innerGraph = nullptr;
 public:
     void readGraph(const std::string &n);

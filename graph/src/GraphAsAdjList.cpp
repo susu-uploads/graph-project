@@ -86,7 +86,9 @@ void GraphAsAdjList::load(int s, int d, int w, const std::vector<std::vector<int
     init(s, d, w);
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
-            addEdge(i, j, data[i][j]);
+            if (data[i][j] != 0) {
+                addEdge(i, j, data[i][j]);
+            }
         }
     }
 }
