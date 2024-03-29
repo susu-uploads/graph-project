@@ -20,12 +20,14 @@ void test_2();
 void test_3();
 
 int main() {
-    test_1();
-    std::cout << "1 done" << std::endl;
-    test_2();
-    std::cout << "2 done" << std::endl;
-    test_3();
-    std::cout << "3 done" << std::endl;
+    Graph graph;
+    graph.readGraph(IN);
+    graph.transformToListOfEdges();
+    graph.writeGraph(OUT_1);
+    graph.transformToAdjList();
+    graph.writeGraph(OUT_2);
+    graph.transformToAdjMatrix();
+    graph.writeGraph(OUT_3);
     return 0;
 }
 
