@@ -7,12 +7,12 @@
 
 using namespace std;
 
-void GraphAsEdgesList::addEdge(int from, int to, int weight) {
+void GraphAsEdgesList::addEdge(const int from, const int to, const int weight) {
     holder.emplace_back(from, to, weight);
 }
 
-void GraphAsEdgesList::removeEdge(int from, int to) {
-    for (auto edge = holder.begin(); edge != holder.end(); edge++) {
+void GraphAsEdgesList::removeEdge(const int from, const int to) {
+    for (auto edge = holder.begin(); edge != holder.end(); ++edge) {
         if (directed == NOT_DIRECTED) {
             if (edge->from == from && edge->to == to || edge->from == to && edge->to == from) {
                 holder.erase(edge);
@@ -27,7 +27,7 @@ void GraphAsEdgesList::removeEdge(int from, int to) {
     }
 }
 
-int GraphAsEdgesList::changeEdge(int from, int to, int newWeight) {
+int GraphAsEdgesList::changeEdge(const int from, const int to, const int newWeight) {
     int old_weight = -1;
     for (auto &edge : holder) {
         if (directed == NOT_DIRECTED) {
@@ -80,19 +80,19 @@ void GraphAsEdgesList::dump(std::ofstream &output) {
     }
 }
 
-bool check_if_duplicate(vector<set<int>> &used, int v, int w) {
+bool check_if_duplicate(vector<set<int>> &used, const int v, const int w) {
     bool is_duplicate = (used[v].find(w) != used[v].end()) || (used[w].find(v) != used[w].end());
     used[v].insert(w);
     used[w].insert(v);
     return is_duplicate;
 }
 
-void GraphAsEdgesList::load(int s, int d, int w, const std::vector<Node> &data) {
+void GraphAsEdgesList::load(const int s, const int d, const int w, const std::vector<Node> &data) {
     init(s, d, w);
     if (directed == NOT_DIRECTED) {
         vector<set<int>> used(size);
         for (const auto &node : data) {
-            for (auto edge : node.children) {
+            for (const auto edge : node.children) {
                 if (!check_if_duplicate(used, node.name, edge.first)) {
                     addEdge(node.name, edge.first, edge.second);
                 }
@@ -100,14 +100,14 @@ void GraphAsEdgesList::load(int s, int d, int w, const std::vector<Node> &data) 
         }
     } else if (directed == DIRECTED) {
         for (const auto &node : data) {
-            for (auto edge : node.children) {
+            for (const auto edge : node.children) {
                 addEdge(node.name, edge.first, edge.second);
             }
         }
     }
 }
 
-void GraphAsEdgesList::load(int s, int d, int w, const std::vector<std::vector<int>> &data) {
+void GraphAsEdgesList::load(const int s, const int d, const int w, const std::vector<std::vector<int>> &data) {
     init(s, d, w);
     if (directed == NOT_DIRECTED) {
         for (int i = 0; i < size; i++) {
@@ -128,7 +128,7 @@ void GraphAsEdgesList::load(int s, int d, int w, const std::vector<std::vector<i
     }
 }
 
-void GraphAsEdgesList::init(int s, int d, int w) {
+void GraphAsEdgesList::init(const int s, const int d, const int w) {
     size = s;
     weighted = w;
     directed = d;

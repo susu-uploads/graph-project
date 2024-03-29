@@ -3,28 +3,21 @@
 //
 
 #include <fstream>
-#include <functional>
 #include "../include/Graph.h"
-
-#define ADJUSTMENT_MATRIX 0
-#define ADJUSTMENT_LIST 1
-#define EDGES_LIST 2
 
 using namespace std;
 
-void Graph::readGraph(const std::string &n) {
-    // Open stream
-    ifstream fileStream{n, ios_base::in};
-    // Discovering what input pattern is
+void Graph::readGraph(const std::string &fileName) {
+    ifstream fileStream{fileName, ios_base::in};
     char inputType;
     fileStream >> inputType;
-    if (inputType == 'C') {
+    if (inputType == ADJUSTMENT_MATRIX_INDICATOR) {
         representation = ADJUSTMENT_MATRIX;
         innerGraph = new GraphAsAdjMatrix;
-    } else if (inputType == 'L') {
+    } else if (inputType == ADJUSTMENT_LIST_INDICATOR) {
         representation = ADJUSTMENT_LIST;
         innerGraph = new GraphAsAdjList;
-    } else if (inputType == 'E') {
+    } else if (inputType == EDGES_LIST_INDICATOR) {
         representation = EDGES_LIST;
         innerGraph = new GraphAsEdgesList;
     } else {
@@ -33,68 +26,74 @@ void Graph::readGraph(const std::string &n) {
     innerGraph->load(fileStream);
 }
 
-void Graph::addEdge(int from, int to, int weight) {
+void Graph::addEdge(const int from, const int to, const int weight) const {
     innerGraph->addEdge(from, to, weight);
 }
 
-void Graph::removeEdge(int from, int to) {
+void Graph::removeEdge(const int from, const int to) const {
     innerGraph->removeEdge(from, to);
 }
 
-int Graph::changeEdge(int from, int to, int newWeight) {
-    innerGraph->changeEdge(from, to, newWeight);
+int Graph::changeEdge(const int from, const int to, const int newWeight) const {
+    return innerGraph->changeEdge(from, to, newWeight);
 }
 
 void Graph::transformToAdjMatrix() {
-    auto new_graph = new GraphAsAdjMatrix;
-    if (representation == ADJUSTMENT_LIST) {
-        auto current_graph = dynamic_cast<GraphAsAdjList *>(innerGraph);
-        new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
-        innerGraph = new_graph;
-    } else if (representation == EDGES_LIST) {
-        auto current_graph = dynamic_cast<GraphAsEdgesList *>(innerGraph);
-        new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
-        innerGraph = new_graph;
+    if (representation == ADJUSTMENT_MATRIX) {
+        return;
     }
+    const auto new_graph = new GraphAsAdjMatrix;
+    if (representation == ADJUSTMENT_LIST) {
+        const auto adjl_graph = dynamic_cast<GraphAsAdjList *>(innerGraph);
+        new_graph->load(adjl_graph->size, adjl_graph->directed, adjl_graph->weighted, adjl_graph->holder);
+    } else if (representation == EDGES_LIST) {
+        const auto edjl_graph = dynamic_cast<GraphAsEdgesList *>(innerGraph);
+        new_graph->load(edjl_graph->size, edjl_graph->directed, edjl_graph->weighted, edjl_graph->holder);
+    }
+    innerGraph = new_graph;
     representation = ADJUSTMENT_MATRIX;
 }
 
 void Graph::transformToAdjList() {
-    auto new_graph = new GraphAsAdjList;
-    if (representation == ADJUSTMENT_MATRIX) {
-        auto current_graph = dynamic_cast<GraphAsAdjMatrix *>(innerGraph);
-        new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
-        innerGraph = new_graph;
-    } else if (representation == EDGES_LIST) {
-        auto current_graph = dynamic_cast<GraphAsEdgesList *>(innerGraph);
-        new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
-        innerGraph = new_graph;
+    if (representation == ADJUSTMENT_LIST) {
+        return;
     }
+    const auto new_graph = new GraphAsAdjList;
+    if (representation == ADJUSTMENT_MATRIX) {
+        const auto adjm_graph = dynamic_cast<GraphAsAdjMatrix *>(innerGraph);
+        new_graph->load(adjm_graph->size, adjm_graph->directed, adjm_graph->weighted, adjm_graph->holder);
+    } else if (representation == EDGES_LIST) {
+        const auto edjl_graph = dynamic_cast<GraphAsEdgesList *>(innerGraph);
+        new_graph->load(edjl_graph->size, edjl_graph->directed, edjl_graph->weighted, edjl_graph->holder);
+    }
+    innerGraph = new_graph;
     representation = ADJUSTMENT_LIST;
 }
 
 void Graph::transformToListOfEdges() {
-    auto new_graph = new GraphAsEdgesList;
-    if (representation == ADJUSTMENT_MATRIX) {
-        auto current_graph = dynamic_cast<GraphAsAdjMatrix *>(innerGraph);
-        new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
-        innerGraph = new_graph;
-    } else if (representation == ADJUSTMENT_LIST) {
-        auto current_graph = dynamic_cast<GraphAsAdjList *>(innerGraph);
-        new_graph->load(current_graph->size, current_graph->directed, current_graph->weighted, current_graph->holder);
-        innerGraph = new_graph;
+    if (representation == EDGES_LIST) {
+        return;
     }
+    const auto new_graph = new GraphAsEdgesList;
+    if (representation == ADJUSTMENT_MATRIX) {
+        const auto adjm_graph = dynamic_cast<GraphAsAdjMatrix *>(innerGraph);
+        new_graph->load(adjm_graph->size, adjm_graph->directed, adjm_graph->weighted, adjm_graph->holder);
+    } else if (representation == ADJUSTMENT_LIST) {
+        const auto adjl_graph = dynamic_cast<GraphAsAdjList *>(innerGraph);
+        new_graph->load(adjl_graph->size, adjl_graph->directed, adjl_graph->weighted, adjl_graph->holder);
+    }
+    innerGraph = new_graph;
     representation = EDGES_LIST;
 }
 
-void Graph::writeGraph(const std::string &fileName) {
+void Graph::writeGraph(const std::string &fileName) const {
     ofstream fileStream{fileName, ios_base::out};
     if (representation == ADJUSTMENT_MATRIX) {
-        fileStream << 'C' << ' ';
+        fileStream << ADJUSTMENT_MATRIX_INDICATOR << ' ';
     } else if (representation == ADJUSTMENT_LIST) {
-        fileStream << 'L' << ' ';
+        fileStream << ADJUSTMENT_LIST_INDICATOR << ' ';
     } else if (representation == EDGES_LIST) {
-        fileStream << 'E' << ' ';
+        fileStream << EDGES_LIST_INDICATOR << ' ';
     }
     innerGraph->dump(fileStream);
 }

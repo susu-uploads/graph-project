@@ -8,15 +8,15 @@
 
 using namespace std;
 
-void GraphAsAdjMatrix::addEdge(int from, int to, int weight) {
+void GraphAsAdjMatrix::addEdge(const int from, const int to, const int weight) {
     holder[from][to] = weight;
 }
 
-void GraphAsAdjMatrix::removeEdge(int from, int to) {
+void GraphAsAdjMatrix::removeEdge(const int from, const int to) {
     holder[from][to] = 0;
 }
 
-int GraphAsAdjMatrix::changeEdge(int from, int to, int newWeight) {
+int GraphAsAdjMatrix::changeEdge(const int from, const int to, const int newWeight) {
     int old_weight = holder[from][to];
     holder[from][to] = newWeight;
     return old_weight;
@@ -49,7 +49,7 @@ void GraphAsAdjMatrix::dump(std::ofstream &output) {
     }
 }
 
-void GraphAsAdjMatrix::init(int s, int d, int w) {
+void GraphAsAdjMatrix::init(const int s, const int d, const int w) {
     size = s;
     directed = d;
     weighted = w;
@@ -57,21 +57,21 @@ void GraphAsAdjMatrix::init(int s, int d, int w) {
     holder.resize(s, vector<int>(s));
 }
 
-void GraphAsAdjMatrix::load(int s, int d, int w, const std::vector<Edge> &data) {
+void GraphAsAdjMatrix::load(const int s, const int d, const int w, const std::vector<Edge> &data) {
     init(s, d, w);
     if (directed == NOT_DIRECTED) {
-        for (Edge edge : data) {
+        for (const Edge edge : data) {
             addEdge(edge.from, edge.to, edge.weight);
             addEdge(edge.to, edge.from, edge.weight);
         }
     } else if (directed == DIRECTED) {
-        for (Edge edge : data) {
+        for (const Edge edge : data) {
             addEdge(edge.from, edge.to, edge.weight);
         }
     }
 }
 
-void GraphAsAdjMatrix::load(int s, int d, int w, const std::vector<Node> &data) {
+void GraphAsAdjMatrix::load(const int s, const int d, const int w, const std::vector<Node> &data) {
     init(s, d, w);
     for (const auto &node : data) {
         for (auto connection : node.children) {

@@ -1,38 +1,80 @@
 //
 // Created by mick on 12.02.2024.
-//
 
 #ifndef GRAPH_PROJECT_GRAPH_H
 #define GRAPH_PROJECT_GRAPH_H
 
 
 #include <string>
-#include <vector>
-#include "Edge.h"
-#include "GraphAsEdgesList.h"
 #include "GraphAsAdjList.h"
 #include "GraphAsAdjMatrix.h"
+#include "GraphAsEdgesList.h"
 
+#define ADJUSTMENT_MATRIX_INDICATOR 'C'
+#define ADJUSTMENT_LIST_INDICATOR 'L'
+#define EDGES_LIST_INDICATOR 'E'
+
+#define ADJUSTMENT_MATRIX 0
+#define ADJUSTMENT_LIST 1
+#define EDGES_LIST 2
+
+/**
+ * Main class used to describe Graph as is.
+ */
 class Graph {
-private:
     int representation{};
     InnerGraph *innerGraph = nullptr;
+
 public:
-    void readGraph(const std::string &n);
+    /**
+     * Used to read graph from file.
+     * @param fileName File name.
+     */
+    void readGraph(const std::string &fileName);
 
-    void addEdge(int from, int to, int weight);
+    /**
+     * Used to add edge into graph.
+     * @param from Start vertice [id].
+     * @param to End vertice [id].
+     * @param weight Weight of the edge.
+     */
+    void addEdge(int from, int to, int weight) const;
 
-    void removeEdge(int from, int to);
+    /**
+     * Used to remove edge from the graph.
+     * @param from Start vertice [id].
+     * @param to End vertice [id].
+     */
+    void removeEdge(int from, int to) const;
 
-    int changeEdge(int from, int to, int newWeight);
+    /**
+     * Used to change edge weight, if exist. If not exists - throws exception.
+     * @param from Start vertice [id].
+     * @param to End vertice [id].
+     * @param newWeight New weight of the edge.
+     */
+    int changeEdge(int from, int to, int newWeight) const;
 
+    /**
+     * Used to convert current graph representation into ADJUSTMENT_LIST.
+     */
     void transformToAdjList();
 
+    /**
+     * Used to convert current graph representation into ADJUSTMENT_MATRIX.
+     */
     void transformToAdjMatrix();
 
+    /**
+     * Used to convert current graph representation into EDGES_LIST.
+     */
     void transformToListOfEdges();
 
-    void writeGraph(const std::string &fileName);
+    /**
+       * Used to write graph into file.
+       * @param fileName File name.
+       */
+    void writeGraph(const std::string &fileName) const;
 };
 
 
