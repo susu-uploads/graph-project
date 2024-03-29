@@ -10,7 +10,15 @@
 struct Edge {
     int from, to, weight;
 
-    Edge(int v, int w, int length = 1);
+    Edge(int u, int v, int length = 1);
+
+    friend bool operator<(const Edge &lhs, const Edge &rhs);
+
+    friend bool operator<=(const Edge &lhs, const Edge &rhs);
+
+    friend bool operator>(const Edge &lhs, const Edge &rhs);
+
+    friend bool operator>=(const Edge &lhs, const Edge &rhs);
 };
 
 #endif //GRAPH_PROJECT_EDGE_H

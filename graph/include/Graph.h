@@ -23,17 +23,8 @@
  * Main class used to describe Graph as is.
  */
 class Graph {
-    int representation{};
-    InnerGraph *innerGraph = nullptr;
-
-    /**
-     * Internal Prima's MST construction algorithm.
-     * @param graph MST graph pointer.
-     * @param size Size of the initial graph.
-     * @param data Data representation as adjustment list.
-     * @throws illegal_argument_exception When MST tree cannot be constructed.
-     */
-    static void internal_mst_prima(Graph &graph, int size, std::vector<Node> &data);
+    int representation;
+    InnerGraph *innerGraph;
 
 public:
     /**

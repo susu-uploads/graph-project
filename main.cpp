@@ -3,7 +3,7 @@
 #include <queue>
 
 #include "graph/include/Graph.h"
-#include "util/include/DSU.h"
+#include "graph/include/DSU.h"
 
 using namespace std;
 
@@ -20,10 +20,12 @@ void test_dsu();
 
 void test_mst();
 
+void inner_test_mst();
+
 void test_priority_queue();
 
 int main() {
-    test_mst();
+    inner_test_mst();
     return 0;
 }
 
@@ -64,6 +66,19 @@ void test_mst() {
     mst.writeGraph(OUT_1);
 }
 
+void inner_test_mst() {
+    // test first
+    Graph g1;
+    g1.readGraph(IN);
+    const auto mst1 = g1.getSpaingTreePrima();
+    mst1.writeGraph(OUT_1);
+    // test second
+    Graph g2;
+    g2.readGraph(OUT_1);
+    const auto mst2 = g2.getSpaingTreePrima();
+    mst2.writeGraph(OUT_2);
+}
+
 void test_priority_queue() {
     std::priority_queue<pair<int, int>, std::vector<pair<int, int>>, std::greater<>> queue;
     queue.emplace(3, 2);
@@ -75,29 +90,3 @@ void test_priority_queue() {
         queue.pop();
     }
 }
-
-// 1-(29)-2
-// 1-(30)-3
-// 1-(1)-4
-// 1-(4)-5
-// 2-(23)-3
-// 3-(28)-4
-// 4-(13)-5
-// 2-(10)-6
-// 2-(15)-7
-// 3-(12)-7
-// 3-(15)-8
-// 4-(24)-8
-// 4-(25)-9
-// 5-(1)-9
-// 6-(11)-3
-// 7-(19)-4
-// 8-(8)-5
-// 9-(20)-8
-// 8-(21)-7
-// 7-(25)-6
-// 6-(27)-10
-// 7-(28)-10
-// 9-(19)-11
-// 8-(20)-11
-// 10-(18)-11

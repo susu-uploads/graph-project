@@ -2,7 +2,7 @@
 // Created by mick on 29.03.24.
 //
 
-#include "DSU.h"
+#include "../include/DSU.h"
 
 #include <queue>
 #include <stdexcept>

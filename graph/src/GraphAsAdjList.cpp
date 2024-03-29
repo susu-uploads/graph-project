@@ -45,7 +45,7 @@ void GraphAsAdjList::load(std::ifstream &input) {
     int N, D, W;
     input >> N >> D >> W;
     init(N, D, W);
-    std::string line;
+    string line;
     getline(input, line);
     if (weighted == NOT_WEIGHTED) {
         for (int i = 0; i < size; i++) {

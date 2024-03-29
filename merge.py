@@ -15,6 +15,8 @@ NAMESPACES_ORDER: List[str] = [
     "Edge.cpp",
     "Node.h",
     "Node.cpp",
+    "DSU.h",
+    "DSU.cpp",
     "InnerGraph.h",
     "GraphAsAdjList.h",
     "GraphAsAdjList.cpp",
@@ -23,23 +25,22 @@ NAMESPACES_ORDER: List[str] = [
     "GraphAsEdgesList.h",
     "GraphAsEdgesList.cpp",
     "Graph.h",
+    "MST.h",
+    "MST.cpp",
     "Graph.cpp"
 ]
 
 MAIN_TEMPLATE: str = """
-#define IN "in.txt"
-#define OUT "out.txt"
-
-int main() {
+int main()
+{
     Graph g;
-    g.readGraph(IN);
-    g.transformToAdjMatrix();
-    g.transformToAdjList();
-    g.transformToListOfEdges();
-    g.transformToAdjMatrix();
-    g.transformToAdjList();
-    g.transformToListOfEdges();
-    g.writeGraph(OUT);
+    g.readGraph("input.txt");
+    //Graph gg=g.getSpaingTreeBoruvka();
+    Graph gg = g.getSpaingTreeKruscal();
+    // Graph gg=g.getSpaingTreePrima();
+    gg.transformToAdjList();
+    gg.writeGraph("output.txt");
+    return 0;
 }
 """
 
