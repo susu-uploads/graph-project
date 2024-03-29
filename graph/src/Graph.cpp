@@ -5,7 +5,52 @@
 #include <fstream>
 #include "../include/Graph.h"
 
+#include <iostream>
+#include <queue>
+#include <set>
+#include <stdexcept>
+#include <unistd.h>
+
 using namespace std;
+
+void Graph::internal_mst_prima(Graph &graph, const int size, std::vector<Node> &data) {
+    // setup
+    int accessed_nodes_counter = 0;
+    vector used_vertices(size, false);
+    std::priority_queue<tuple<int, int, int>, std::vector<tuple<int, int, int>>, std::greater<> > queue;
+    // [WEIGHT, FROM, TO]
+
+    // init
+    queue.emplace(0, 0, 0);
+    used_vertices[0] = true;
+
+    // algorithm
+    while (!queue.empty()) {
+        const auto [curr_weight, curr_from, curr_to] = queue.top();
+        queue.pop();
+
+        // add edge to new vertice if it wasn't used
+        if (used_vertices[curr_from] && !used_vertices[curr_to]) {
+            graph.addEdge(curr_from, curr_to, curr_weight);
+            accessed_nodes_counter++;
+            used_vertices[curr_to] = true;
+        }
+
+        // access new edges from vertice
+        for (const auto [name, weight]: data[curr_to].children) {
+            if (!used_vertices[name]) {
+                queue.emplace(weight, curr_to, name);
+            }
+        }
+    }
+}
+
+Graph::Graph() : representation(EDGES_LIST) {
+    innerGraph = new GraphAsEdgesList;
+    innerGraph->size = 0;
+    innerGraph->directed = NOT_DIRECTED;
+    innerGraph->weighted = WEIGHTED;
+}
 
 Graph::Graph(const int size) : representation(EDGES_LIST) {
     innerGraph = new GraphAsEdgesList;
@@ -106,7 +151,11 @@ void Graph::writeGraph(const std::string &fileName) const {
 }
 
 Graph Graph::getSpaingTreePrima() {
-    return Graph{};
+    this->transformToAdjList();
+    const auto representation = dynamic_cast<GraphAsAdjList *>(innerGraph);
+    Graph mst(representation->size);
+    internal_mst_prima(mst, representation->size, representation->holder);
+    return mst;
 }
 
 Graph Graph::getSpaingTreeKruscal() {

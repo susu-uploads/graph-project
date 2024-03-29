@@ -1,5 +1,6 @@
 //
 // Created by mick on 12.02.2024.
+//
 
 #ifndef GRAPH_PROJECT_GRAPH_H
 #define GRAPH_PROJECT_GRAPH_H
@@ -25,11 +26,20 @@ class Graph {
     int representation{};
     InnerGraph *innerGraph = nullptr;
 
+    /**
+     * Internal Prima's MST construction algorithm.
+     * @param graph MST graph pointer.
+     * @param size Size of the initial graph.
+     * @param data Data representation as adjustment list.
+     * @throws illegal_argument_exception When MST tree cannot be constructed.
+     */
+    static void internal_mst_prima(Graph &graph, int size, std::vector<Node> &data);
+
 public:
     /**
      * Initialize graph object.
      */
-    Graph() = default;
+    Graph();
 
     /**
      * Create graph object as edges list.
