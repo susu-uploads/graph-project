@@ -7,6 +7,13 @@
 
 using namespace std;
 
+Graph::Graph(const int size) : representation(EDGES_LIST) {
+    innerGraph = new GraphAsEdgesList;
+    innerGraph->size = size;
+    innerGraph->directed = NOT_DIRECTED;
+    innerGraph->weighted = WEIGHTED;
+}
+
 void Graph::readGraph(const std::string &fileName) {
     ifstream fileStream{fileName, ios_base::in};
     char inputType;
@@ -96,4 +103,16 @@ void Graph::writeGraph(const std::string &fileName) const {
         fileStream << EDGES_LIST_INDICATOR << ' ';
     }
     innerGraph->dump(fileStream);
+}
+
+Graph Graph::getSpaingTreePrima() {
+    return Graph{};
+}
+
+Graph Graph::getSpaingTreeKruscal() {
+    return Graph{};
+}
+
+Graph Graph::getSpaingTreeBoruvka() {
+    return Graph{};
 }

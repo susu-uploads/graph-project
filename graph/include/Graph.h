@@ -27,6 +27,17 @@ class Graph {
 
 public:
     /**
+     * Initialize graph object.
+     */
+    Graph() = default;
+
+    /**
+     * Create graph object as edges list.
+     * @param size Size of the graph.
+     */
+    explicit Graph(int size);
+
+    /**
      * Used to read graph from file.
      * @param fileName File name.
      */
@@ -75,6 +86,24 @@ public:
        * @param fileName File name.
        */
     void writeGraph(const std::string &fileName) const;
+
+    /**
+     * Calculate MST using Prima's algorithm.
+     * @return MST graph.
+     */
+    Graph getSpaingTreePrima();
+
+    /**
+     * Calculate MST using Kruskal's algorithm.
+     * @return MST graph.
+     */
+    Graph getSpaingTreeKruscal();
+
+    /**
+     * Calculate MST using Boruvka's algorithm.
+     * @return MST graph.
+     */
+    Graph getSpaingTreeBoruvka();
 };
 
 
