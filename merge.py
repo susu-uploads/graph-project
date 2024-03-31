@@ -72,7 +72,7 @@ if __name__ == "__main__":
     sources: List[Tuple[int, List[str]]] = list()
     regexes = list(map(lambda x: re.compile(x), FORBIDDEN_LINES))
 
-    file: TextIO = open("result.cpp", "w")
+    file: TextIO = open("lab_2.cpp", "w")
     for path, subdirs, files in os.walk(os.path.join(cwd, "graph")):
         for name in files:
             if name in NAMESPACES_ORDER:

@@ -11,5 +11,5 @@ $ python3 merge.py
 #### Удаление src-файла
 
 ```shell
-$ rm -f ./result.cpp
+$ rm -f ./lab_1.cpp ./lab_2.cpp
 ```

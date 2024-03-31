@@ -4,13 +4,13 @@ set(CMAKE_CXX_STANDARD 17)
 set(PROJECT_NAME graph_project)
 set(
         SOURCE_FILES
-        result.cpp
+        main.cpp
 )
 
 project(${PROJECT_NAME})
 
-#add_subdirectory(graph)
+add_subdirectory(graph)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-#target_link_libraries(${PROJECT_NAME} PUBLIC graph)
+target_link_libraries(${PROJECT_NAME} PUBLIC graph)

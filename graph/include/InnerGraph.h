@@ -4,6 +4,8 @@
 #ifndef GRAPH_PROJECT_INNERGRAPH_H
 #define GRAPH_PROJECT_INNERGRAPH_H
 
+#include <fstream>
+
 #define NOT_DIRECTED 0
 #define DIRECTED 1
 #define NOT_WEIGHTED 0
