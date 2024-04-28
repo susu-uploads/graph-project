@@ -25,19 +25,17 @@ void inner_test_mst();
 void test_priority_queue();
 
 int main() {
-    inner_test_mst();
+    test_with_my_graph();
     return 0;
 }
 
 void test_with_my_graph() {
     Graph graph;
     graph.readGraph(IN);
-    graph.transformToListOfEdges();
-    graph.writeGraph(OUT_1);
-    graph.transformToAdjList();
-    graph.writeGraph(OUT_2);
-    graph.transformToAdjMatrix();
-    graph.writeGraph(OUT_3);
+    bool circleExist;
+    int v = graph.checkEuler(circleExist);
+    cout << circleExist << " " << v << endl;
+    graph.getEuleranTourFleri();
 }
 
 void test_with_given_graph() {

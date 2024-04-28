@@ -10,7 +10,10 @@ set(
         src/GraphAsEdgesList.cpp
         src/GraphAsAdjMatrix.cpp
         src/GraphAsAdjList.cpp
-        src/DSU.cpp)
+        src/DSU.cpp
+        src/MST.cpp
+        src/Euler.cpp
+)
 
 set(
         HEADER_FILES
@@ -22,8 +25,9 @@ set(
         include/GraphAsAdjList.h
         include/InnerGraph.h
         include/DSU.h
-        src/MST.cpp
-        include/MST.h)
+        include/MST.h
+        include/Euler.h
+)
 
 add_library(${LIBRARY_NAME} STATIC ${SOURCE_FILES} ${HEADER_FILES})
 

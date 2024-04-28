@@ -105,6 +105,25 @@ public:
      * @return MST graph.
      */
     Graph getSpaingTreeBoruvka();
+
+    /**
+     * Check if Euler path/cycle exists in graph.
+     * @param circleExist A calculated argument indicating the presence/absence of an Euler cycle in the graph.
+     * @return Returns the number of the vertex from which the construction of an Euler path/cycle can be started, or 0 if the graph does not contain an Euler path/cycle.
+     */
+    int checkEuler(bool &circleExist);
+
+    /**
+     * Calculate Euleran path/cycle with Fleri's algorithm.
+     * @return Euleran vertices tour.
+     */
+    std::vector<int> getEuleranTourFleri();
+
+    /**
+      * Calculate Euleran path/cycle with effective algorithm.
+      * @return Euleran vertices tour.
+      */
+    std::vector<int> getEuleranTourEffective();
 };
 
 
