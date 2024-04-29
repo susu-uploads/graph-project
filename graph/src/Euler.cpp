@@ -7,7 +7,18 @@
 
 #include <cstring>
 #include <functional>
+#include <iostream>
 
+
+/**
+ * Util dfs function used to count reachable vertices from node.
+ * @param vertices Graph vertices as adjustment list.
+ * @param vertice Start vertice.
+ * @param used Processed vertices.
+ * @param validate Lamda function used to validate edge (in order to not delete in-place edges).
+ * @return Number of reachable vertices from start vertice.
+ */
+int dfs(const std::vector<Node> &vertices, int vertice, bool used[], const std::function<bool(int u, int v)> &validate);
 
 std::pair<int, bool> find_vertice(const std::vector<Node> &vertices) {
     // Setup
@@ -31,47 +42,74 @@ std::pair<int, bool> find_vertice(const std::vector<Node> &vertices) {
         return std::pair{0, true};
     }
     if (odd_counter == 2) {
-        return std::pair{start_v.front() + 1, false};
+        return std::pair{start_v.front(), false};
     }
     throw std::invalid_argument("Unable to detect any Euler path/cycle!");
 }
 
 bool is_next_edge_valid(const std::vector<Node> &vertices, const int u, const int v, const int directed) {
-    // if there's no edge between vertices
+    // NOT ADJUSTMENT
     if (vertices[u].children.find(v) == vertices[u].children.end()) {
         return false;
     }
-    // The edge u-v is valid in one of the following two cases:
 
-    // 1) If v is the only adjacent vertex of u
+    // SINGLE
     if (vertices[u].children.find(v) != vertices[u].children.end() && vertices[u].children.size() == 1) {
         return true;
     }
-    // 2) If there are multiple adjacents, then u-v is not a
-    // bridge Do following steps to check if u-v is a bridge
 
-    // 2.a) count of vertices reachable from u
-    auto not_removed_validator = [&](int a, int b) -> bool {
+    // NOT REMOVING COUNTER
+    auto not_removed_validator = [&](int, int) -> bool {
         return true;
     };
     const int count_1 = count_reachable_vertices(vertices, u, not_removed_validator);
 
-    // 2.b) Remove edge (u, v) and after removing the edge,
-    // count vertices reachable from u
-    auto removed_validator = [&](int a, int b) -> bool {
+    // REMOVING COUNTER
+    auto removed_validator = [&](const int a, const int b) -> bool {
         if (directed == NOT_DIRECTED) {
-            return (a != u && b != v) || (a != v && b != u);
+            // std::cout << "a: " << a << " b: " << b << " u: " << u << " v: " << v << std::endl;
+            return !((a == u && b == v) || (a == v && b == u));
         }
         return a != u && b != v;
     };
     const int count_2 = count_reachable_vertices(vertices, u, removed_validator);
-
-    // 2.d) If count1 is greater, then edge (u, v) is a
-    // bridge
     return count_1 <= count_2;
 }
 
-int dfs(const std::vector<Node> &vertices, const int vertice, bool used[], const std::function<bool(int u, int v)> &validate) {
+int count_reachable_vertices(const std::vector<Node> &vertices, const int vertice,
+                             const std::function<bool(int u, int v)> &validate) {
+    bool used[vertices.size()];
+    memset(used, false, vertices.size());
+    return dfs(vertices, vertice, used, validate);
+}
+
+std::vector<int> find_euler_tour_fluery(std::vector<Node> &vertices, const int is_directed) {
+    auto path = std::vector<int>();
+    auto [current, isCycle] = find_vertice(vertices);
+    while (current != -1) {
+        path.push_back(current);
+        bool found = false;
+        for (auto [node, weight] : vertices[current].children) {
+            if (is_next_edge_valid(vertices, current, node, is_directed)) {
+                vertices[current].children.erase(node);
+                if (!is_directed) {
+                    vertices[node].children.erase(current);
+                }
+                current = node;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            current = -1;
+        }
+    }
+
+    return path;
+}
+
+int dfs(const std::vector<Node> &vertices, const int vertice, bool used[],
+        const std::function<bool(int u, int v)> &validate) {
     used[vertice] = true;
     int reached = 1;
     for (const auto [node, weight]: vertices[vertice].children) {
@@ -80,10 +118,4 @@ int dfs(const std::vector<Node> &vertices, const int vertice, bool used[], const
         }
     }
     return reached;
-}
-
-int count_reachable_vertices(const std::vector<Node> &vertices, const int vertice, const std::function<bool(int u, int v)> &validate) {
-    bool used[vertices.size()];
-    memset(used, false, vertices.size());
-    return dfs(vertices, vertice, used, validate);
 }

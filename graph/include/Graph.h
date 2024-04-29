@@ -117,7 +117,7 @@ public:
      * Calculate Euleran path/cycle with Fleri's algorithm.
      * @return Euleran vertices tour.
      */
-    std::vector<int> getEuleranTourFleri();
+    std::vector<int> getEuleranTourFleri() const;
 
     /**
       * Calculate Euleran path/cycle with effective algorithm.

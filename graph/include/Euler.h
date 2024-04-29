@@ -22,6 +22,7 @@ std::pair<int, bool> find_vertice(const std::vector<Node> &vertices);
  * @param vertices Graph vertices as adjustment list.
  * @param u Vertice from.
  * @param v Vertice to.
+ * @param directed 0 - NOT DIRECTED, 1 - DIRECTED.
  * @return Is this edge a bridge.
  */
 bool is_next_edge_valid(const std::vector<Node> &vertices, int u, int v, int directed);
@@ -34,3 +35,11 @@ bool is_next_edge_valid(const std::vector<Node> &vertices, int u, int v, int dir
  * @return Count of reachable vertices.
  */
 int count_reachable_vertices(const std::vector<Node> &vertices, int vertice, const std::function<bool(int u, int v)> &validate);
+
+/**
+ * Calculates Euler path/cycle using Fluery's algorithm.
+ * @param vertices Graph vertices as adjustment list. WILL BE MODIFIED!
+ * @param is_directed 0 - NOT_DIRECTED, 1 - DIRECTED.
+ * @return Euler path/cycle if exists.
+ */
+std::vector<int> find_euler_tour_fluery(std::vector<Node> &vertices, int is_directed);
