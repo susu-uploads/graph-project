@@ -7,10 +7,19 @@
 
 using namespace std;
 
-#define IN "/home/mick/CLionProjects/graph-project/res/in"
+#define IN "/home/mick/CLionProjects/graph-project/res/euler"
 #define OUT_1 "/home/mick/CLionProjects/graph-project/res/out_1"
 #define OUT_2 "/home/mick/CLionProjects/graph-project/res/out_2"
 #define OUT_3 "/home/mick/CLionProjects/graph-project/res/out_3"
+
+#define PRINT(Expression) \
+    std::cout << #Expression << ": " << Expression << "\n"
+
+#define PRINT_COLLECTION(Collection) \
+    std::cout << #Collection << "\n"; \
+    for (int i = 0; i < Collection.size(); i++) { \
+        std::cout << i << ": " << Collection[i] << "\n"; \
+    }
 
 void test_with_my_graph();
 
@@ -25,19 +34,18 @@ void inner_test_mst();
 void test_priority_queue();
 
 int main() {
-    inner_test_mst();
+    test_with_my_graph();
     return 0;
 }
 
 void test_with_my_graph() {
     Graph graph;
     graph.readGraph(IN);
-    graph.transformToListOfEdges();
-    graph.writeGraph(OUT_1);
-    graph.transformToAdjList();
-    graph.writeGraph(OUT_2);
-    graph.transformToAdjMatrix();
-    graph.writeGraph(OUT_3);
+    bool circleExist;
+    const int v = graph.checkEuler(circleExist);
+    PRINT(circleExist);
+    PRINT(v);
+    PRINT_COLLECTION(graph.getEuleranTourFleri());
 }
 
 void test_with_given_graph() {
@@ -80,7 +88,7 @@ void inner_test_mst() {
 }
 
 void test_priority_queue() {
-    std::priority_queue<pair<int, int>, std::vector<pair<int, int>>, std::greater<>> queue;
+    std::priority_queue<pair<int, int>, std::vector<pair<int, int> >, std::greater<> > queue;
     queue.emplace(3, 2);
     queue.emplace(1, 1);
     queue.emplace(1, 4);

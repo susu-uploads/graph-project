@@ -6,6 +6,7 @@
 #include "../include/Graph.h"
 
 #include <algorithm>
+#include <cassert>
 #include <iostream>
 #include <queue>
 #include <set>
@@ -13,6 +14,7 @@
 #include <unistd.h>
 
 #include "DSU.h"
+#include "Euler.h"
 #include "MST.h"
 
 using namespace std;
@@ -144,4 +146,26 @@ Graph Graph::getSpaingTreeBoruvka() {
     const Graph mst(representation->size);
     make_boruvka_mst(mst, representation->size, representation->holder);
     return mst;
+}
+
+int Graph::checkEuler(bool &circleExist) {
+    this->transformToAdjList();
+    const auto adjl_graph = dynamic_cast<GraphAsAdjList *>(innerGraph);
+    try {
+        const auto [vertice, isExist] = find_vertice(adjl_graph->holder);
+        circleExist = isExist;
+        return vertice + 1;
+    } catch (std::invalid_argument &exception) {
+        circleExist = false;
+        return 0;
+    }
+}
+
+std::vector<int> Graph::getEuleranTourFleri() const {
+    const auto adjl_graph = dynamic_cast<GraphAsAdjList *>(innerGraph);
+    auto vertices = vector(adjl_graph->holder);
+    return find_euler_tour_fluery(vertices, adjl_graph->directed);
+}
+
+std::vector<int> Graph::getEuleranTourEffective() {
 }
